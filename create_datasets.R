@@ -1,7 +1,7 @@
 # figure out how to read datasets efficiently and cleanly while making these
 # summaries at the same time
 
-# write final dataset into a file in rustcrn (I like that name it's dumb)
+# write final dataset into a file in rustcrn
 
 # A dataset with one row for each station, providing information about the
 # station identifier, station name, state, longitude, and latitude.
