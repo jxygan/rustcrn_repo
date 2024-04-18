@@ -1,3 +1,7 @@
 # raw data 
 raw_data/* 
 .Rproj.user
+
+# other stuff 
+.DS_Store
+.Rhistory
