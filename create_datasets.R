@@ -71,3 +71,7 @@ station_data <- full_data[!duplicated(full_data["WBANNO"]),][,c("WBANNO",
 
 # Write station data to file
 saveRDS(station_data, file = "data/stations.rds")
+
+# Read files into session
+# full_daily_weather <- readRDS("data/full_daily_weather.rds")
+# stations <- readRDS("data/stations.rds")
