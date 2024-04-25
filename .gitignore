@@ -5,3 +5,4 @@ raw_data/*
 # other stuff 
 .DS_Store
 .Rhistory
+scratch.R
