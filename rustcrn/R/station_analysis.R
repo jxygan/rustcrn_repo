@@ -11,6 +11,9 @@
 #' @export
 #'
 #' @examples
+#' ithaca <- 64758
+#' ithaca_cycle <- yearly_cycle(ithaca)
+#' plot(t_daily_pred ~ doy, data = ithaca_cycle, type = "l")
 time_series <- function(station_id, start_date = NULL, end_date = NULL) {
   # Filter data by station ID first
   station_data <- full_daily_weather |> dplyr::filter(WBANNO == station_id)
