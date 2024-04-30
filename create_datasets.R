@@ -61,6 +61,7 @@ full_data$LST_DATE <- dates
 
 # Write full dataset to file
 saveRDS(full_data, file = "data/full_daily_weather.rds")
+save(full_data, file = "data/full_daily_weather.RData")
 
 # Collect individual station data by station identifier
 station_data <- full_data[!duplicated(full_data["WBANNO"]),][,c("WBANNO",
@@ -71,6 +72,7 @@ station_data <- full_data[!duplicated(full_data["WBANNO"]),][,c("WBANNO",
 
 # Write station data to file
 saveRDS(station_data, file = "data/stations.rds")
+save(station_data, file = "data/stations.RData")
 
 # Read files into session
 # full_daily_weather <- readRDS("data/full_daily_weather.rds")

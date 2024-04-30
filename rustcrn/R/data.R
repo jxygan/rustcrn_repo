@@ -1,0 +1,41 @@
+
+#'Latitude/Longitude Coordinates of Weather Stations in the USA
+#'
+#'A dataset with the lognitude latitude coordinates of weather stations in USA
+#'
+#' @format a dataframe with
+#' \describe{
+#' \item{WBANNO}{The station WBAN number}
+#' \item{state}{The station's located state }
+#' \item{station_name}{Station name}
+#' \item{LONGITUDE}{Longitude of station in decimal degrees }
+#' \item{LATITUDE}{Latitude of station in decimal degrees}
+#' }
+"stations"
+
+
+#'Daily recording of weather data at weather stations in the USA
+#'
+#'A dataset with the daily weather data from each stations in USA since 2000
+#'
+#' @format a dataframe with
+#' \describe{
+#' \item{WBANNO}{The station WBAN number}
+#' \item{state}{The station's located state }
+#' \item{station_name}{Station name}
+#' \item{LST_DATE}{Date of weather recorded in YYYMMDD}
+#' \item{CRX_VN}{The version number of the station datalogger program that was
+#' in effect at the time of the observation}
+#' \item{LONGITUDE}{Longitude of station in decimal degrees }
+#' \item{LATITUDE}{Latitude of station in decimal degrees}
+#' \item{T_DAILY_MAX}{Maximum air temperature, in degrees C}
+#' \item{T_DAILY_MIN}{Minimum air temperature, in degrees C}
+#' \item{T_DAILY_MEAN}{Mean air temperature, in degrees C, calculated using the
+#'  typical historical approach: (T_DAILY_MAX + T_DAILY_MIN) / 2}
+#' \item{T_DAILY_AVG}{Average air temperature, in degrees C}
+#' \item{P_DAILY_CALC}{ Total amount of precipitation, in mm}
+#' \item{SOLARAD_DAILY}{Total solar energy, in MJ/meter^2, calculated from the
+#' hourly average global solar radiation rates and converted to energy by
+#'  integrating over time.}
+#' }
+"full_daily_weather"

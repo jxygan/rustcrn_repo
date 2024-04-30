@@ -12,5 +12,7 @@ LazyData: true
 Imports:
   dplyr,
   stats,
-  lme4
+  lme4,
+  ggplot2,
+  sf
 RoxygenNote: 7.3.1
