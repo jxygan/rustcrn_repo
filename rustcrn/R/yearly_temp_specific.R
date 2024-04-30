@@ -23,12 +23,12 @@ yearly_cycle <- function(station_id) {
 
   # Fit sinusoidal model to average temperature data, including the
   # second harmonic
-  year.lm <- lm(T_DAILY_AVG ~ cos(2*pi*doy/365.25) + sin(2*pi*doy/365.25) +
+  year.lm <- stats::lm(T_DAILY_AVG ~ cos(2*pi*doy/365.25) + sin(2*pi*doy/365.25) +
                   cos(4*pi*doy/365.25) + sin(4*pi*doy/365.25),
                 data = ts)
   print(summary(year.lm))
 
-  preds <- predict(year.lm, newdata = list(doy = 1:365))
+  preds <- stats::predict(year.lm, newdata = list(doy = 1:365))
 
   # Return data frame with columns for DOY and predictions
   return(data.frame(doy = 1:365, t_daily_pred = preds))

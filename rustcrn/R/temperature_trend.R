@@ -23,17 +23,17 @@ temp_trend <- function(station_id = NULL) {
     avg_temp <- ts$T_DAILY_AVG
     year <- as.numeric(ts$LST_DATE - as.Date("2000-01-01"))/365.25
 
-    tt <- lm(avg_temp ~ year)
+    tt <- stats::lm(avg_temp ~ year)
     return(tt)
   }
 
   # pull trend from all stations
   # get daily avg temps and express DOY as years since 2000
-  avg_temp <- full_daily_weather$T_DAILY_AVG
-  year <- as.numeric(full_daily_weather$LST_DATE - as.Date("2000-01-01"))/365.25
+  avg_temp <- rustcrn::full_daily_weather$T_DAILY_AVG
+  year <- as.numeric(rustcrn::full_daily_weather$LST_DATE - as.Date("2000-01-01"))/365.25
 
   # model with station IDs as random effects
-  WBANNO <- full_daily_weather$WBANNO
+  WBANNO <- rustcrn::full_daily_weather$WBANNO
   tt <- lme4::lmer(avg_temp ~ year + (1|WBANNO))
 
   return(tt)

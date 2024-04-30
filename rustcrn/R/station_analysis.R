@@ -12,22 +12,24 @@
 #'
 #' @examples
 #' ithaca <- 64758
-#' ithaca_cycle <- yearly_cycle(ithaca)
-#' plot(t_daily_pred ~ doy, data = ithaca_cycle, type = "l")
+#' ithaca_ts <- time_series(ithaca)
+#' ithaca_2010s <- time_series(ithaca, start_date = "2010-01-01",
+#'                             end_date = "2019-12-31")
+#' @importFrom rlang .data
 time_series <- function(station_id, start_date = NULL, end_date = NULL) {
   # Filter data by station ID first
-  station_data <- full_daily_weather |> dplyr::filter(WBANNO == station_id)
+  station_data <-  dplyr::filter(rustcrn::full_daily_weather, .data$WBANNO == station_id)
 
   # Check and apply start date filter if provided
   if (!is.null(start_date)) {
     start_date <- as.Date(start_date)
-    station_data <- station_data |> dplyr::filter(LST_DATE >= start_date)
+    station_data <- dplyr::filter(station_data, .data$LST_DATE >= start_date)
   }
 
   # Check and apply end date filter if provided
   if (!is.null(end_date)) {
     end_date <- as.Date(end_date)
-    station_data <- station_data |> dplyr::filter(LST_DATE <= end_date)
+    station_data <- dplyr::filter(station_data, .data$LST_DATE <= end_date)
   }
 
   return(station_data)
