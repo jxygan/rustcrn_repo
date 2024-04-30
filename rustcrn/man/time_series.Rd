@@ -7,11 +7,11 @@
 time_series(station_id, start_date = NULL, end_date = NULL)
 }
 \arguments{
-\item{station_id}{The station ID (WBANNO number)}
+\item{station_id}{numeric station ID (WBANNO number)}
 
-\item{start_date}{Start of time series (format YYYY-mm-dd)}
+\item{start_date}{character string with format YYYY-mm-dd for start of time series}
 
-\item{end_date}{End of time series (format YYYY-mm-dd)}
+\item{end_date}{character string with format YYYY-mm-dd for end of time series}
 }
 \value{
 A data frame containing the full time series from the start of data collection to the most recent date, or between user-specified dates.
@@ -22,6 +22,7 @@ given start and end dates (default: the entire time series) in a data frame.
 }
 \examples{
 ithaca <- 64758
-ithaca_cycle <- yearly_cycle(ithaca)
-plot(t_daily_pred ~ doy, data = ithaca_cycle, type = "l")
+ithaca_ts <- time_series(ithaca)
+ithaca_2010s <- time_series(ithaca, start_date = "2010-01-01",
+                            end_date = "2019-12-31")
 }

@@ -3,9 +3,9 @@
 #' Get every entry recorded by USCRN for a given weather station, between
 #' given start and end dates (default: the entire time series) in a data frame.
 #'
-#' @param station_id The station ID (WBANNO number)
-#' @param start_date Start of time series (format YYYY-mm-dd)
-#' @param end_date End of time series (format YYYY-mm-dd)
+#' @param station_id numeric station ID (WBANNO number)
+#' @param start_date character string with format YYYY-mm-dd for start of time series
+#' @param end_date character string with format YYYY-mm-dd for end of time series
 #'
 #' @return A data frame containing the full time series from the start of data collection to the most recent date, or between user-specified dates.
 #' @export
