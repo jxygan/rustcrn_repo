@@ -11,6 +11,7 @@
 #' \item{LONGITUDE}{Longitude of station in decimal degrees }
 #' \item{LATITUDE}{Latitude of station in decimal degrees}
 #' }
+#'
 "stations"
 
 
