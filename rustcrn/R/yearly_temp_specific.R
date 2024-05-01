@@ -26,7 +26,6 @@ yearly_cycle <- function(station_id) {
   year.lm <- stats::lm(T_DAILY_AVG ~ cos(2*pi*doy/365.25) + sin(2*pi*doy/365.25) +
                   cos(4*pi*doy/365.25) + sin(4*pi*doy/365.25),
                 data = ts)
-  print(summary(year.lm))
 
   preds <- stats::predict(year.lm, newdata = list(doy = 1:365))
 
