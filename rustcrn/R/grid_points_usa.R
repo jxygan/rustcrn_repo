@@ -1,6 +1,4 @@
-library(sp)
-library(dplyr)
-library(ggplot2)
+
 #####################
 
 grid_points_usa <- function(resolution){
@@ -10,8 +8,8 @@ grid_points_usa <- function(resolution){
   usa_map <- usa_map[usa_map$region == "main", ]
 
   #square matrix of min max coordinates
-  lons <- seq(min(usa_map$long),max(usa_map$long), length.out = resolution)
-  lats <- seq(min(usa_map$lat),max(usa_map$lat), length.out = resolution)
+  lons <- seq(min(usa_map$long), max(usa_map$long), length.out = resolution)
+  lats <- seq(min(usa_map$lat), max(usa_map$lat), length.out = resolution)
   grid_square <- expand.grid(lons, lats)
 
   #find intersection points
@@ -30,6 +28,6 @@ grid_points_usa <- function(resolution){
 #returns a row of all grid points and if it is in USA
 
 #test
-result <- grid_points_usa(100)
-result
+# result <- grid_points_usa(100)
+# result
 

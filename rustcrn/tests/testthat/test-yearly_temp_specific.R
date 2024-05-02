@@ -2,6 +2,10 @@ test_that("Output has the correct dimensions", {
   ithaca <- 64758
   expect_equal(nrow(yearly_cycle(ithaca)), 365)
   expect_equal(ncol(yearly_cycle(ithaca)), 2)
+
+  asheville <- 53878
+  expect_equal(nrow(yearly_cycle(asheville)), 365)
+  expect_equal(ncol(yearly_cycle(asheville)), 2)
 })
 
 test_that("Predictions fall in the correct range", {

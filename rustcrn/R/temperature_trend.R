@@ -1,40 +1,59 @@
-#' Get the overall temperature trend in the US contiguous 48
+#' Get temperature trends for stations in the US contiguous 48
 #'
-#' Get a model of temperature change over time in degrees Celsius per year
+#' Get a temperature change over time in degrees Celsius per year
 #' for the contiguous 48 states, based on USCRN data.
 #'
-#' @param station_id optional numeric WBANNO number for specified station
+#' Temperature trends are modeled using a linear model with year and sinusoidal
+#' components, to account for seasonality, and the function returns a small
+#' summary of the model results including the coefficient for the year component
+#' (the trend).
 #'
-#' @return a linear model of class merMod or lm
+#' @param station_ids vector of WBANNO numbers to get trends for specified stations.
+#'
+#' @return a data frame with four columns and n rows, where n is the number of stations in the input vector
+#' \itemize{
+#' \item \code{WBANNO} the station ID
+#' \item \code{trend} trend of temperature change, in degrees Celsius per year
+#' \item \code{p} the p-value of the year coefficient
+#' \item \code{se} standard error of the model
+#' }
 #' @export
 #'
 #' @examples
 #' # all stations
-#' tt_all <- temp_trend()
-#' summary(tt_all)
+#' tt_all <- temp_trend(rustcrn::stations$WBANNO)
 #'
 #' # for Ithaca
 #' tt_ithaca <- temp_trend(64758)
-#' summary(tt_ithaca)
-temp_trend <- function(station_id = NULL) {
-  # pull trend from one station
-  if(!is.null(station_id)) {
-    ts <- time_series(station_id)
+#' tt_ithaca[["trend"]]
+temp_trend <- function(station_ids) {
+  # create trend data frame
+  trend <- as.data.frame(
+    matrix(nrow = length(station_ids),
+           ncol = 4,
+           dimnames = list(NULL,
+                           c("WBANNO", "trend", "p", "se"))))
+
+  for(i in 1:length(station_ids)) {
+    # fit model
+    ts <- time_series(station_ids[i])
+    doy <- as.POSIXlt(ts$LST_DATE)$yday
+
     avg_temp <- ts$T_DAILY_AVG
     year <- as.numeric(ts$LST_DATE - as.Date("2000-01-01"))/365.25
 
-    tt <- stats::lm(avg_temp ~ year)
-    return(tt)
+    tt <- stats::lm(avg_temp ~ year +
+                      cos(2*pi*doy/365.25) +
+                      sin(2*pi*doy/365.25) +
+                      cos(4*pi*doy/365.25) +
+                      sin(4*pi*doy/365.25))
+
+    # add values to data frame
+    trend[i, "WBANNO"] <- station_ids[i]
+    trend[i, "trend"] <- tt$coefficients[2]
+    trend[i, "p"] <- summary(tt)$coefficients[2,4]
+    trend[i, "se"] <- stats::sigma(tt)
   }
 
-  # pull trend from all stations
-  # get daily avg temps and express DOY as years since 2000
-  avg_temp <- rustcrn::full_daily_weather$T_DAILY_AVG
-  year <- as.numeric(rustcrn::full_daily_weather$LST_DATE - as.Date("2000-01-01"))/365.25
-
-  # model with station IDs as random effects
-  WBANNO <- rustcrn::full_daily_weather$WBANNO
-  tt <- lme4::lmer(avg_temp ~ year + (1|WBANNO))
-
-  return(tt)
+  return(trend)
 }

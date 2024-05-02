@@ -12,7 +12,7 @@ LazyData: true
 Imports:
   dplyr,
   stats,
-  lme4,
+  fields,
   ggplot2,
   sp,
   GpGp

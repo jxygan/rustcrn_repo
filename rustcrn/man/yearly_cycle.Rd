@@ -17,8 +17,9 @@ A data frame containing two columns:
 }
 }
 \description{
-Get predicted values for each day of the year based on a sinusoidal model
-fit on the USCRN average daily temperatures for a given research station.
+Get predicted values for each day of the year based on a second harmonic
+sinusoidal model fit on the USCRN average daily temperatures for a given
+research station.
 }
 \examples{
 ithaca <- 64758

@@ -1,11 +1,9 @@
 
-library(GpGp)
-
 # value is a vector of values against stations long, latitude
 
 intrapolation <- function(value){
   y <- value
-  locs <- cbind(stations$LONGITUDE, stations$LATITUDE)
+  locs <- cbind(rustcrn::stations$LONGITUDE, rustcrn::stations$LATITUDE)
   fit <- GpGp::fit_model(y = y,
                          locs= locs,
                          covfun_name = "matern_sphere",
@@ -13,7 +11,7 @@ intrapolation <- function(value){
 
   locs_pred <- cbind(grid_square$long, grid_square$lat)
 
-  prediction <- predictions(fit = fit,
+  prediction <- GpGp::predictions(fit = fit,
                             locs_pred = locs_pred)
 
   prediction <- cbind(grid_square, prediction )
@@ -24,5 +22,5 @@ intrapolation <- function(value){
 
 
 #testing
-example
-intrapolation()
+# example
+# intrapolation()

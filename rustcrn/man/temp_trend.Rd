@@ -2,26 +2,37 @@
 % Please edit documentation in R/temperature_trend.R
 \name{temp_trend}
 \alias{temp_trend}
-\title{Get the overall temperature trend in the US contiguous 48}
+\title{Get temperature trends for stations in the US contiguous 48}
 \usage{
-temp_trend(station_id = NULL)
+temp_trend(station_ids)
 }
 \arguments{
-\item{station_id}{optional numeric WBANNO number for specified station}
+\item{station_ids}{vector of WBANNO numbers to get trends for specified stations.}
 }
 \value{
-a linear model of class merMod or lm
+a data frame with four columns and n rows, where n is the number of stations in the input vector
+\itemize{
+\item \code{WBANNO} the station ID
+\item \code{trend} trend of temperature change, in degrees Celsius per year
+\item \code{p} the p-value of the year coefficient
+\item \code{se} standard error of the model
+}
 }
 \description{
-Get a model of temperature change over time in degrees Celsius per year
+Get a temperature change over time in degrees Celsius per year
 for the contiguous 48 states, based on USCRN data.
+}
+\details{
+Temperature trends are modeled using a linear model with year and sinusoidal
+components, to account for seasonality, and the function returns a small
+summary of the model results including the coefficient for the year component
+(the trend).
 }
 \examples{
 # all stations
-tt_all <- temp_trend()
-summary(tt_all)
+tt_all <- temp_trend(rustcrn::stations$WBANNO)
 
 # for Ithaca
 tt_ithaca <- temp_trend(64758)
-summary(tt_ithaca)
+tt_ithaca[["trend"]]
 }

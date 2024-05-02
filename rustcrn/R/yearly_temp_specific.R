@@ -1,7 +1,8 @@
 #' Model the yearly temperature cycle of a specified USCRN weather station
 #'
-#' Get predicted values for each day of the year based on a sinusoidal model
-#' fit on the USCRN average daily temperatures for a given research station.
+#' Get predicted values for each day of the year based on a second harmonic
+#' sinusoidal model fit on the USCRN average daily temperatures for a given
+#' research station.
 #'
 #' @param station_id The station ID (WBANNO number)
 #'
