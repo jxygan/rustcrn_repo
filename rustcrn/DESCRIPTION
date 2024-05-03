@@ -12,10 +12,11 @@ LazyData: true
 Imports:
   dplyr,
   stats,
-  fields,
+  lme4,
   ggplot2,
   sp,
-  GpGp
+  GpGp,
+  fields
 RoxygenNote: 7.3.1
 Depends: 
     R (>= 2.10)
