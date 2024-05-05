@@ -2,16 +2,15 @@
 #'
 #' @param value a vector of data corresponding to 236 station locations
 #' @param resolution numeric value for resolution of map
-#' 
+#'
 #' @return A data frame of prediction with its corresponding longitude and latitude
 #' @export
 #'
 #' @examples
-#' #To get data frame of predicted average year temperature of USA with resolution 100
-#' interpolation( Average temperature of each station, 100)
-#'
-#' #To get data frame of predicted temperature in March 2024 of USA at each long, lat with resolution 30
-#' interpolation(March 2024 average temperature of each station, 30)
+#' #To get data frame of predicted estimated trend of temperature of USA with resolution 100
+#' tt_all <- temp_trend(rustcrn::stations$WBANNO)
+#' value  <- tt_all[, 2]
+#' interpolation( value, 100)
 
 
 interpolation <- function(value, resolution){
