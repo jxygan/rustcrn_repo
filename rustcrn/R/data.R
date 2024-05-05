@@ -1,9 +1,10 @@
 
 #'Information on USCRN weather stations
 #'
-#'A dataset containing information on the each USCRN weather station.
+#'A dataset containing information on each USCRN weather station, including
+#'location (in longitude and latitude), state, and station name.
 #'
-#' @format a dataframe with
+#' @format a dataframe with 5 columns
 #' \describe{
 #' \item{WBANNO}{The station WBAN number (unique identifier)}
 #' \item{state}{Two-letter abbreviation of the station's state or territory}
@@ -15,11 +16,12 @@
 "stations"
 
 
-#'Daily recording of weather data at weather stations in the USA
+#'USCRN station daily weather data
 #'
-#'A dataset with the daily weather data from each stations in USA since 2000
+#'A dataset containing daily weather data from each USCRN weather station, from
+#'2000-11-14 to 2024-04-07.
 #'
-#' @format a dataframe with
+#' @format a dataframe with 13 columns
 #' \describe{
 #' \item{WBANNO}{The station WBAN number}
 #' \item{state}{The station's located state }

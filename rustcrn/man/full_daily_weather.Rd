@@ -3,9 +3,9 @@
 \docType{data}
 \name{full_daily_weather}
 \alias{full_daily_weather}
-\title{Daily recording of weather data at weather stations in the USA}
+\title{USCRN station daily weather data}
 \format{
-a dataframe with
+a dataframe with 13 columns
 \describe{
 \item{WBANNO}{The station WBAN number}
 \item{state}{The station's located state }
@@ -30,6 +30,7 @@ hourly average global solar radiation rates and converted to energy by
 full_daily_weather
 }
 \description{
-A dataset with the daily weather data from each stations in USA since 2000
+A dataset containing daily weather data from each USCRN weather station, from
+2000-11-14 to 2024-04-07.
 }
 \keyword{datasets}

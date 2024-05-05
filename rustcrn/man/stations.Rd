@@ -3,12 +3,12 @@
 \docType{data}
 \name{stations}
 \alias{stations}
-\title{Latitude/Longitude Coordinates of Weather Stations in the USA}
+\title{Information on USCRN weather stations}
 \format{
-a dataframe with
+a dataframe with 5 columns
 \describe{
-\item{WBANNO}{The station WBAN number}
-\item{state}{The station's located state }
+\item{WBANNO}{The station WBAN number (unique identifier)}
+\item{state}{Two-letter abbreviation of the station's state or territory}
 \item{station_name}{Station name}
 \item{LONGITUDE}{Longitude of station in decimal degrees }
 \item{LATITUDE}{Latitude of station in decimal degrees}
@@ -18,6 +18,7 @@ a dataframe with
 stations
 }
 \description{
-A dataset with the lognitude latitude coordinates of weather stations in USA
+A dataset containing information on each USCRN weather station, including
+location (in longitude and latitude), state, and station name.
 }
 \keyword{datasets}

@@ -4,22 +4,31 @@
 \alias{plotting_interpolation}
 \title{Plot the interpolated data}
 \usage{
-plotting_interpolation(value, resolution)
+plotting_interpolation(value, stations = NULL, resolution = 100)
 }
 \arguments{
-\item{value}{a vector of data corresponding to 236 station locations}
+\item{value}{a vector of data corresponding to stations specified in \code{stations}}
 
-\item{resolution}{numeric value for resolution of map}
+\item{stations}{an optional numeric vector of station WBANNOs to use in interpolation}
+
+\item{resolution}{numeric value for grid resolution}
 }
 \value{
-Produce visual representation of spatial predictions
+\code{NULL}
 }
 \description{
 Using the interpolated data, produces a visual representation of predicted
 results by plotting through image.plot
 }
 \examples{
-#For image of predicted average year temperature of USA with resolution 100
-plotting_interpolation(value, resolution)
+# visualize predicted estimated trend of temperature of USA with
+# resolution 100
+tt_all <- temp_trend(rustcrn::stations$WBANNO)
+value  <- tt_all[, 2]
+plotting_interpolation( value )
 
+# visualize interpolation of every other station at a lower resolution
+other <- rustcrn::stations$WBANNO[seq(2, nrow(rustcrn::stations), by = 2)]
+value_other <- temp_trend(other)[,2]
+plotting_interpolation( value_other, stations = other, resolution = 75 )
 }

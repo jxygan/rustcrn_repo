@@ -12,9 +12,9 @@ grid_points_usa(resolution = 100)
 \value{
 A dataframe of grid points with longitude, latitude, and whether the point is inside the USA
 \itemize{
-\item \code{long} longitude
-\item \code{lat} latitude
-\item \code{in_usa} 1 if the point is in the contiguous USA, 0 otherwise
+\item \code{long} Longitude in decimal degrees
+\item \code{lat} Latitude in decimal degrees
+\item \code{in_usa} numeric 1 if the point is in the contiguous USA, 0 otherwise
 }
 }
 \description{
