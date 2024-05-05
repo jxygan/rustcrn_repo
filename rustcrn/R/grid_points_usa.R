@@ -18,6 +18,12 @@
 
 grid_points_usa <- function(resolution = 100){
   
+  # Check if resolution is a non-negative integer
+  if (!is.numeric(resolution) || resolution != as.integer(resolution) 
+      || resolution <= 0) {
+    stop("Error! Resolution not integer")
+  }
+  
   # Gets map data for the USA
   usa_map <- ggplot2::map_data("usa")
   usa_map <- usa_map[usa_map$region == "main", ]
@@ -33,7 +39,7 @@ grid_points_usa <- function(resolution = 100){
   
   
   #Use intersection to show if coordinates in USA location by 1,0
-  grid_square$in_us <- intersection
+  grid_square$in_usa <- intersection
   
   #Rename columns to fit longitude latitude.
   names(grid_square)[1] <- "long"
