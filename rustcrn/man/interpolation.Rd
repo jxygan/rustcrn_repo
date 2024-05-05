@@ -19,11 +19,8 @@ Interpolate data from the stations to a grid points within the contiguous USA
 }
 \examples{
 #To get data frame of predicted average year temperature of USA with resolution 100
-value <- Average year temperature of each station
-interpolation( value, 100)
+interpolation( Average temperature of each station, 100)
 
-#To get data frame of predicted temperature in March 2024 of USA at each long, lat
-with resolution 30
-value <- March 2024 average temperature of each station
-interpolation(value, 30)
+#To get data frame of predicted temperature in March 2024 of USA at each long, lat with resolution 30
+interpolation(March 2024 average temperature of each station, 30)
 }
