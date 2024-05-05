@@ -16,6 +16,7 @@
 #' \item \code{trend} trend of temperature change, in degrees Celsius per year
 #' \item \code{p} the p-value of the year coefficient
 #' \item \code{se} standard error of the model
+#' \item \code{len} the length of data collection, in years
 #' }
 #' @export
 #'
@@ -30,13 +31,14 @@ temp_trend <- function(station_ids) {
   # create trend data frame
   trend <- as.data.frame(
     matrix(nrow = length(station_ids),
-           ncol = 4,
+           ncol = 5,
            dimnames = list(NULL,
-                           c("WBANNO", "trend", "p", "se"))))
+                           c("WBANNO", "trend", "p", "se", "len"))))
 
   for(i in 1:length(station_ids)) {
     # fit model
     ts <- time_series(station_ids[i])
+    length <- (max(ts$LST_DATE) - min(ts$LST_DATE))/365.25
     doy <- as.POSIXlt(ts$LST_DATE)$yday
 
     avg_temp <- ts$T_DAILY_AVG
@@ -53,6 +55,7 @@ temp_trend <- function(station_ids) {
     trend[i, "trend"] <- tt$coefficients[2]
     trend[i, "p"] <- summary(tt)$coefficients[2,4]
     trend[i, "se"] <- stats::sigma(tt)
+    trend[i, "len"] <- length
   }
 
   return(trend)

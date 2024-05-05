@@ -7,19 +7,29 @@
 grid_points_usa(resolution = 100)
 }
 \arguments{
-\item{resolution}{numeric value for resolution of map}
+\item{resolution}{integer value specifying the number of grid divisions}
 }
 \value{
-A dataframe of grid points with longitude, latitude, and whether it's inside the USA
+A dataframe of grid points with longitude, latitude, and whether the point is inside the USA
+\itemize{
+\item \code{long} longitude
+\item \code{lat} latitude
+\item \code{in_usa} 1 if the point is in the contiguous USA, 0 otherwise
+}
 }
 \description{
-Get a data frame of grid points. Each row corresponding to a specific grid point,
-showing its longitude, latitude, and whether it's inside the USA by binary.
+Get a data frame of grid points. Each row corresponds to a specific grid point,
+containing its longitude, latitude, and whether it's inside the contiguous
+United States.
+}
+\details{
+The longitudes and latitudes correspond to an \eqn{n \times n} grid with
+points spanning the contiguous USA, with \eqn{n =} \code{resolution}
 }
 \examples{
-#grid with resolution 30
+#grid with resolution 30, 900 points in total
 grid_points_usa(30)
 
-#grid with resolution 100
+#grid with default resolution (100), 10,000 points in total
 grid_points_usa()
 }

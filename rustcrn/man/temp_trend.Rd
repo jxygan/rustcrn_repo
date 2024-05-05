@@ -16,6 +16,7 @@ a data frame with four columns and n rows, where n is the number of stations in 
 \item \code{trend} trend of temperature change, in degrees Celsius per year
 \item \code{p} the p-value of the year coefficient
 \item \code{se} standard error of the model
+\item \code{len} the length of data collection, in years
 }
 }
 \description{
