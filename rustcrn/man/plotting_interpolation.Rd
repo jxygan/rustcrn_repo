@@ -2,9 +2,16 @@
 % Please edit documentation in R/plotting_interpolation.R
 \name{plotting_interpolation}
 \alias{plotting_interpolation}
-\title{Plot the interpolated data}
+\title{Plot interpolated USCRN data on the US contiguous 48}
 \usage{
-plotting_interpolation(value, stations = NULL, resolution = 100)
+plotting_interpolation(
+  value,
+  stations = NULL,
+  resolution = 100,
+  main = "Predicted Value by Location in US",
+  palette = "Terrain",
+  lines = TRUE
+)
 }
 \arguments{
 \item{value}{a vector of data corresponding to stations specified in \code{stations}}
@@ -12,13 +19,23 @@ plotting_interpolation(value, stations = NULL, resolution = 100)
 \item{stations}{an optional numeric vector of station WBANNOs to use in interpolation}
 
 \item{resolution}{numeric value for grid resolution}
+
+\item{main}{plot title, default is "Predicted Value by Location in US"}
+
+\item{palette}{a valid palette name to be passed to [grDevices::hcl.colors]}
+
+\item{lines}{a logical indicating whether a map of the US should be drawn on top of the map}
 }
 \value{
 \code{NULL}
 }
 \description{
-Using the interpolated data, produces a visual representation of predicted
-results by plotting through image.plot
+Using interpolated weather station data, draw a visual representation of the
+predicted results in the form of a heat map-style plot of the US contiguous 48
+states.
+}
+\details{
+See [fields::imagePlot], [grDevices::hcl.colors], [rustcrn::interpolation].
 }
 \examples{
 # visualize predicted estimated trend of temperature of USA with
@@ -27,8 +44,7 @@ tt_all <- temp_trend(rustcrn::stations$WBANNO)
 value  <- tt_all[, 2]
 plotting_interpolation( value )
 
-# visualize interpolation of every other station at a lower resolution
-other <- rustcrn::stations$WBANNO[seq(2, nrow(rustcrn::stations), by = 2)]
-value_other <- temp_trend(other)[,2]
-plotting_interpolation( value_other, stations = other, resolution = 75 )
+# change the plot title, palette, and remove state lines
+plotting_interpolation( value, main = "Temperature trends",
+                        palette = "Temps", lines = FALSE )
 }

@@ -58,7 +58,7 @@ interpolation <- function(value, stations = NULL, resolution = 100){
   locs_pred <- cbind(grid_square$long, grid_square$lat)
 
   #Create prediction
-  x <- model.matrix( ~1, data = grid_square )
+  x <- stats::model.matrix( ~1, data = grid_square )
   prediction <- GpGp::predictions(fit = fit,
                                   locs_pred = locs_pred,
                                   X_pred = x)
