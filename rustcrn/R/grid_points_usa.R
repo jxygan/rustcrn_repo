@@ -9,7 +9,7 @@
 #' @return A dataframe of grid points with longitude, latitude, and whether it's inside the USA
 #' @export
 #'
-#' @example
+#' @examples 
 #' #grid with resolution 30
 #' grid_points_usa(30)
 #'

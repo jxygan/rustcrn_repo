@@ -9,9 +9,8 @@
 #' @return Produce visual representation of spatial predictions
 #' @export
 #'
-#' @example
-#' #To get image of predicted average year temperature of USA at each long, lat
-#' with resolution 100
+#' @examples
+#' #For image of predicted average year temperature of USA with resolution 100
 #' plotting_interpolation(value, resolution)
 #' 
 plotting_interpolation <- function(value, resolution) {
@@ -30,7 +29,6 @@ plotting_interpolation <- function(value, resolution) {
   #plotting image
   plot <- fields::image.plot(pred.matrix, axes = TRUE, 
                              xlab = "Longitude", ylab = "Latitude",
-                             xaxis
                              main = "Predicted Value by Location in US",
                              col = terrain.colors(100),
                              key.title = "Predicted Value")

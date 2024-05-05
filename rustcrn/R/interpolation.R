@@ -6,12 +6,10 @@
 #' @return A data frame of prediction with its corresponding longitude and latitude
 #' @export
 #'
-#' @example
-#' #To get data frame of predicted average year temperature of USA at each long, lat
-#' with resolution 100
+#' @examples
+#' #To get data frame of predicted average year temperature of USA with resolution 100
 #' value <- Average year temperature of each station
-#' 
-#' interpolation(value, 100)
+#' interpolation( value, 100)
 #'
 #' #To get data frame of predicted temperature in March 2024 of USA at each long, lat
 #' with resolution 30
