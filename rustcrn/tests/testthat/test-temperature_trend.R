@@ -1,17 +1,17 @@
 test_that("Output has correct dimensions", {
   trends <- temp_trend(rustcrn::stations[2:6,1])
   expect_equal(nrow(trends), 5)
-  expect_equal(ncol(trends), 4)
+  expect_equal(ncol(trends), 5)
 
   ithaca <- 64758
   trend_ithaca <- temp_trend(ithaca)
   expect_equal(nrow(trend_ithaca), 1)
-  expect_equal(ncol(trend_ithaca), 4)
+  expect_equal(ncol(trend_ithaca), 5)
 
   asheville <- 53878
   trend_ashe <- temp_trend(asheville)
   expect_equal(nrow(trend_ashe), 1)
-  expect_equal(ncol(trend_ashe), 4)
+  expect_equal(ncol(trend_ashe), 5)
 })
 
 test_that("Output values are not missing", {
@@ -25,5 +25,5 @@ test_that("Output values are not missing", {
   expect_false(anyNA(trend_ashe))
   expect_false(anyNA(trends))
 })
-# come up with ideas for tests... how to test something like this? test
-# for no errors?
+
+

@@ -1,12 +1,12 @@
 
-#'Latitude/Longitude Coordinates of Weather Stations in the USA
+#'Information on USCRN weather stations
 #'
-#'A dataset with the lognitude latitude coordinates of weather stations in USA
+#'A dataset containing information on the each USCRN weather station.
 #'
 #' @format a dataframe with
 #' \describe{
-#' \item{WBANNO}{The station WBAN number}
-#' \item{state}{The station's located state }
+#' \item{WBANNO}{The station WBAN number (unique identifier)}
+#' \item{state}{Two-letter abbreviation of the station's state or territory}
 #' \item{station_name}{Station name}
 #' \item{LONGITUDE}{Longitude of station in decimal degrees }
 #' \item{LATITUDE}{Latitude of station in decimal degrees}
