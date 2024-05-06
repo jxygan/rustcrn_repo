@@ -20,6 +20,9 @@ library(rustcrn)
 
 Make a map of the average temperature at each station for the month of March 2024.
 ```{r}
+
+usa <- ggplot2::map_data("state")
+
 station_id <- stations[, 1]
 
 
@@ -199,6 +202,8 @@ errors are sufficiently small.
 ```{r}
 high_se <- which(trends$se > 5)
 low_len <- which(trends$len < 5)
+
+hist(trends$se)
 
 inter_trends <- trends[-c(high_se, low_len),]
 plotting_interpolation(inter_trends$trend, stations = inter_trends$WBANNO, 

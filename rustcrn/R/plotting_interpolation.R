@@ -29,7 +29,7 @@
 plotting_interpolation <- function(value, stations = NULL, resolution = 100,
                                    main = "Predicted Value by Location in US",
                                    palette = "Terrain",
-                                   lines = TRUE) {
+                                   lines = TRUE, altitude = FALSE) {
   # get interpolated data
   data <- interpolation(value, stations, resolution)
   data$prediction <- ifelse(data$in_usa == 0, NA, data$prediction)
@@ -46,7 +46,7 @@ plotting_interpolation <- function(value, stations = NULL, resolution = 100,
                             main = main,
                             col = grDevices::hcl.colors(64, palette = palette),
                             legend.width = 0.7, horizontal = FALSE,
-                            asp = 1.3)
+                            asp = 0.5)
 
   if(lines) {
     usa <- ggplot2::map_data("state")
