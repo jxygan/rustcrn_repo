@@ -45,7 +45,8 @@ plotting_interpolation <- function(value, stations = NULL, resolution = 100,
   plot <- fields::imagePlot(pred.matrix, axes = FALSE,
                             main = main,
                             col = grDevices::hcl.colors(64, palette = palette),
-                            legend.width = 0.7, horizontal = FALSE)
+                            legend.width = 0.7, horizontal = FALSE,
+                            asp = 1.3)
 
   if(lines) {
     usa <- ggplot2::map_data("state")

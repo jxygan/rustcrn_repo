@@ -23,17 +23,17 @@ Make a map of the average temperature at each station for the month of March 202
 station_id <- stations[, 1]
 
 
-
-
-dim(full_daily_weather)[2]
-
-for(i in 1:length(station_id)){
-  temp <- time_series(i, start_date = '2024-03-01', 
-                      end_date = '2024-03-31')
-  rbind(result, temp)
-}
-
-tapply(result$T_DAILY_AVG, result$station_id, mean)
+# result <- 
+# 
+# dim(full_daily_weather)[2]
+# 
+# for(i in 1:length(station_id)){
+#   temp <- time_series(i, start_date = '2024-03-01', 
+#                       end_date = '2024-03-31')
+#   rbind(result, temp)
+# }
+# 
+# tapply(result$T_DAILY_AVG, result$station_id, mean)
 
 tempera <- subset(full_daily_weather, full_daily_weather$LST_DATE >= as.Date("2024-03-01") &
                            full_daily_weather$LST_DATE <= as.Date("2024-03-31"))
@@ -59,13 +59,157 @@ as.numeric(names(tapp))
 Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider including elevation in your model.
 ```{r}
 
-
-plotting_interpolation(tapp, as.numeric(names(tapp)), 100)
+plotting_interpolation(tapp, as.numeric(names(tapp)), 100, 
+                       main = "Estimated average temperatures in March 2024", 
+                       palette = "Temps")
 
 ```
 
 Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically.
+```{r}
+# par(mfrow = c(1,2))
+# Warmest
+par(bg = "grey90")
+
+plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
+     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
+     axes = F, xlab = "", ylab = "", 
+     main = "Estimated warmest day of the year \nat USCRN weather stations")
+
+invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
+                                   lwd = 0.5, border = "grey30", col = "white")))
+
+# Coldest
+par(bg = "grey90")
+
+plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
+     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
+     axes = F, xlab = "", ylab = "", 
+     main = "Estimated coldest day of the year \nat USCRN weather stations")
+
+invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
+                                   lwd = 0.5, border = "grey30", col = "white")))
+```
 
 
+Make a single plot of the estimated yearly cycles for 10 different
+stations, highlighting a diversity of climates around the contiguous USA.
+Your plot should clearly indicate which cycle is from which station.
 
+```{r}
+# Stations: Asheville, NC (53878); Ithaca, NY (64758); Boulder, CO (94075);
+ #          Des Moines, ID (54902); Moose, WY (4131); Santa Barbara, CA (53152);
+ #          Sioux Falls, SD (4990); Ajo, AZ (53168); Titusville, FL (92821);
+ #          Austin, TX (23907)
+
+selected <- c(53878, 64758, 94075, 54902, 4131, 53152, 4990, 53168, 92821, 23907)
+cycles <- list()
+
+for(i in 1:10) {
+  cycles[[i]] <- yearly_cycle(selected[i])
+}
+
+plot(NULL, NULL, xlim = c(1,365), ylim = c(-25,35), axes = FALSE,
+     ylab = "Estimated temperature (°C)", xlab = "")
+axis.Date(1, format = "%B")
+axis(2)
+title(main = "USCRN weather station yearly cycles")
+for(i in 1:10) {
+  lines(cycles[[i]][,1], cycles[[i]][,2], col = i, lty = i)
+}
+legend(160, 3, legend = c("Asheville, NC", "Ithaca, NY", "Boulder, CO",
+                         "Des Moines, ID", "Moose, WY", "Santa Barbara, CA",
+                         "Sioux Falls, SD", "Ajo, AZ", "Titusville, FL",
+                         "Austin, TX"),
+       col = 1:10, lty = 1:10, cex = 0.5)
+```
+
+
+Estimate the trend over the years for each station, in units of degrees Fahrenheit per year, and plot the trend values on a map. Indicate visually on your map which of the trends are statistically significant.
+
+```{r}
+trends <- as.data.frame( cbind( WBANNO = stations$WBANNO,
+                        matrix(nrow = nrow(stations),
+                               ncol = 4,
+                               dimnames = list(NULL, c("trend", "p", "se", "len"))),
+                        LONGITUDE = stations$LONGITUDE,
+                        LATITUDE = stations$LATITUDE ) )
+
+for(i in 1:nrow(trends)) {
+  trends[i,1:5] <- temp_trend(trends[i,1])
+}
+
+sig <- rep("", times = nrow(trends))
+sig[trends$p < 0.1] <- "."
+sig[trends$p < 0.05] <- "*"
+sig[trends$p < 0.01] <- "**"
+sig[trends$p < 0.001] <- "***"
+
+trends$sig <- sig
+trends$color <- lapply(trends$trend, function(x) {
+  if(x < 0) rgb(0, 0, abs(x)/(abs(x) + 0.01))
+  else rgb(x/(x + 0.1), 0, 0)
+})
+
+hi_ak_sa <- which(stations$state %in% c("HI", "AK", "SA"))
+plot_trends <- trends[-hi_ak_sa,]
+
+usa <- ggplot2::map_data("state")
+
+par(bg = "grey90")
+
+plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
+     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
+     axes = F, xlab = "", ylab = "", 
+     main = "Temperature trends at USCRN weather stations \nin the contiguous 48")
+
+invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
+                                   lwd = 0.5, border = "grey30", col = "white")))
+
+text(plot_trends$LONGITUDE, plot_trends$LATITUDE, 
+     label = paste0(format(plot_trends$trend, digits = 2, scientific = TRUE), 
+                    sig), 
+     col = as.character(plot_trends$color), cex = 0.5)
+
+lgd <- rep(NA, 11)
+lgd[c(1,6,11)] = c(1,0,-1)
+legend(-75, 33, legend = lgd, 
+       fill = colorRampPalette(colors = c('red','black','blue'))(11),
+       border = NA, y.intersp = 0.5, cex = 0.5, box.lwd = 0,
+       title = "°C/year \n", 
+       xjust = 0)
+
+legend(-120, 31, 
+       legend = c("p < 0.1 .", "p < 0.05 *", "p < 0.01 **", "p < 0.001 ***"), 
+       title = "Significance", 
+       horiz = F, cex = 0.5, box.lwd = 0)
+```
+
+In your report, write the statistical model that you used in mathematical 
+notation. Be sure to define all your symbols and assumptions.
+
+$$
+
+$$
+
+Interpolate the estimated trends to a grid, and plot them on a map. For the 
+interpolations, you may consider using only the trend estimates whose standard 
+errors are sufficiently small.
+
+```{r}
+high_se <- which(trends$se > 5)
+low_len <- which(trends$len < 5)
+
+inter_trends <- trends[-c(high_se, low_len),]
+plotting_interpolation(inter_trends$trend, stations = inter_trends$WBANNO, 
+                       main = paste0("Estimated temperature trend in °C/year", 
+                                     " across the \nUS contiguous 48"), 
+                       palette = "Temps")
+```
+
+
+Find a reputable source for the average temperature trend in the contiguous USA 
+over the past 20 years, and compare your results to the source’s.
+
+\[https://www.ncei.noaa.gov/monitoring-content/temp-and-precip/us-trends/tavg/trends-tavg-ann-30year-full.gif]
 
