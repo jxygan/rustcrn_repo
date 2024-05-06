@@ -1,0 +1,23 @@
+Package: rustcrn
+Type: Package
+Title: US National Weather Data Analysis
+Version: 0.1.0
+Authors@R: c(
+    person("Joyce", "Gan", email = "jxg3@cornell.edu", role = c("aut", "cre")),
+    person("Crystal", "Lim", email = "yl733@cornell.edu", role = "aut"))
+Description: Package analyzing data from the US Climate Reference Network (USCRN), data on weather stations maintained by the National Centers for Environmental Information (NCEI) within the National Oceanic and Atmospheric Administration (NOAA).
+License: GNU General Public License
+Encoding: UTF-8
+LazyData: true
+Imports: dplyr, stats, ggplot2, sp, GpGp, fields
+RoxygenNote: 7.3.1
+Depends: R (>= 2.10)
+Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2024-05-05 23:27:31 UTC; crystallim
+Author: Joyce Gan [aut, cre],
+  Crystal Lim [aut]
+Maintainer: Joyce Gan <jxg3@cornell.edu>
+Built: R 4.3.2; ; 2024-05-05 23:27:36 UTC; unix

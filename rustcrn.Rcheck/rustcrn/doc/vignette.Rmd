@@ -1,0 +1,46 @@
+---
+title: "vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+
+```
+
+```{r setup}
+library(rustcrn)
+```
+
+Make a map of the average temperature at each station for the month of March 2024.
+```{r}
+
+
+```
+
+```{r}
+#Make a map of the average temperature at each station for the month of March 2024.
+
+```
+
+Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider including elevation in your model.
+```{r}
+#
+
+
+
+```
+
+Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically.
+
+
+
+

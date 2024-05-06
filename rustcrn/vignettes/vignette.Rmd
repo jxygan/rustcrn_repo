@@ -12,8 +12,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
-
 ```
 
 ```{r setup}
@@ -22,20 +20,47 @@ library(rustcrn)
 
 Make a map of the average temperature at each station for the month of March 2024.
 ```{r}
+station_id <- stations[, 1]
+
+
+
+
+dim(full_daily_weather)[2]
+
+for(i in 1:length(station_id)){
+  temp <- time_series(i, start_date = '2024-03-01', 
+                      end_date = '2024-03-31')
+  rbind(result, temp)
+}
+
+tapply(result$T_DAILY_AVG, result$station_id, mean)
+
+tempera <- subset(full_daily_weather, full_daily_weather$LST_DATE >= as.Date("2024-03-01") &
+                           full_daily_weather$LST_DATE <= as.Date("2024-03-31"))
+
+
+anyNA(tempera$T_DAILY_AVG)
+
+tapp <- tapply(tempera$T_DAILY_AVG, tempera$WBANNO, function(x) {mean(x, na.rm = T)} )
+
+as.numeric(names(tapp))
+
+
+
+
+ 
+
+
 
 
 ```
 
-```{r}
-#Make a map of the average temperature at each station for the month of March 2024.
-
-```
 
 Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider including elevation in your model.
 ```{r}
-#
 
 
+plotting_interpolation(tapp, as.numeric(names(tapp)), 100)
 
 ```
 

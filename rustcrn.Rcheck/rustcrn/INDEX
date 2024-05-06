@@ -1,0 +1,15 @@
+full_daily_weather      USCRN station daily weather data
+grid_points_usa         Create a grid of points that fall within the
+                        contiguous USA
+interpolation           Interpolate USCRN station data to grid points
+                        within the contiguous USA
+plotting_interpolation
+                        Plot interpolated USCRN data on the US
+                        contiguous 48
+stations                Information on USCRN weather stations
+temp_trend              Get temperature trends for stations in the US
+                        contiguous 48
+time_series             Create a time series for a USCRN weather
+                        station
+yearly_cycle            Model the yearly temperature cycle of a
+                        specified USCRN weather station
