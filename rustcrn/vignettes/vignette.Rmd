@@ -20,31 +20,56 @@ library(rustcrn)
 
 Make a map of the average temperature at each station for the month of March 2024.
 ```{r}
-# station_id <- stations[, 1]
-# result <- 
-# 
-# dim(full_daily_weather)[2]
-# 
-# for(i in 1:length(station_id)){
-#   temp <- time_series(i, start_date = '2024-03-01', 
-#                       end_date = '2024-03-31')
-#   rbind(result, temp)
-# }
-# 
-# tapply(result$T_DAILY_AVG, result$station_id, mean)
-
-tempera <- subset(full_daily_weather, 
+# get dataset of march 2024 data from each station
+march_2024 <- subset(full_daily_weather, 
                   full_daily_weather$LST_DATE >= as.Date("2024-03-01") &
                            full_daily_weather$LST_DATE <= as.Date("2024-03-31"))
 
 
-# anyNA(tempera$T_DAILY_AVG)
+# calculate the mean average temperature from each station
 
-tapp <- tapply(tempera$T_DAILY_AVG, 
-               tempera$WBANNO, function(x) {mean(x, na.rm = T)} )
+average_march <- tapply(march_2024$T_DAILY_AVG, 
+               march_2024$WBANNO, function(x) {mean(x, na.rm = T)} )
 
-dat <- stations[match(as.numeric(names(tapp)), stations$WBANNO),] 
-dat$mar_temp <- tapp
+dat <- stations[match(as.numeric(names(average_march)), stations$WBANNO),] 
+dat$mar_temp <- average_march
+
+head(dat, 10)
+
+#plot dat created
+
+usa <- ggplot2::map_data("state")
+par(bg = "grey90")
+plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
+     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
+     axes = F, xlab = "", ylab = "", 
+     main = "Average Temperature of Stations on March 2024")
+
+invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
+                                   lwd = 0.5, border = "grey30", col = "white")))
+
+points(dat$LONGITUDE, dat$LATITUDE, pch = 19, 
+       col= heat.colors(length(dat$mar_temp))[rank(dat$mar_temp)], 
+       cex = 1)
+
+
+
+#legend created
+lgd <- rep(NA, 50)
+lgd[c(1, 25,50)] = c( min(dat$mar_temp),  median(dat$mar_temp), max(dat$mar_temp) )
+
+# Create legend with dynamic color representation
+legend(-75, 35, legend = lgd, 
+       fill =   , 
+       border = NA, y.intersp = 0.5, cex = 0.5, box.lwd = 0,
+       title = "Temperature (°C) in March 2024\n", 
+       xjust = 0)
+
+#legend
+
+
+
+
 ```
 
 
@@ -67,28 +92,38 @@ mar_inter <- interpolation(mar_temp ~ LONGITUDE + LATITUDE + elevation,
 plotting_interpolation(mar_inter, 
                        main = "Estimated average temperatures in March 2024", 
                        palette = "Temps")
-
 ```
+
 
 Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically.
 ```{r}
-usa <- ggplot2::map_data("state")
 
-# par(mfrow = c(1,2))
+
+station_id <- stations$WBANNO
+st <- stations
+# Initializing columns for data to be stored
+st$min_doy <- NA
+st$max_doy <- NA
+st$min_temp <- NA
+st$max_temp <- NA
+
+# Loop through each station ID and calculate min and max temperatures and their dates
+for (i in 1:length(station_id)) {
+    year_data <- yearly_cycle(station_id[i])
+    min_index <- which.min(year_data$t_daily_pred)
+    max_index <- which.max(year_data$t_daily_pred)
+
+    st$min_temp[i] <- year_data$t_daily_pred[min_index]
+    st$max_temp[i] <- year_data$t_daily_pred[max_index]
+    st$min_doy[i] <- year_data$doy[min_index]
+    st$max_doy[i] <- year_data$doy[max_index]
+}
+
+head((st), 10)
+
+
 # Warmest
 par(bg = "grey90")
-
-plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
-     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
-     axes = F, xlab = "", ylab = "", 
-     main = "Estimated warmest day of the year \nat USCRN weather stations")
-
-invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
-                                   lwd = 0.5, border = "grey30", col = "white")))
-
-# Coldest
-par(bg = "grey90")
-
 plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
      ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
      axes = F, xlab = "", ylab = "", 
@@ -96,6 +131,19 @@ plot(NA, NA, xlim = c(min(usa$long), max(usa$long)),
 
 invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
                                    lwd = 0.5, border = "grey30", col = "white")))
+text(st$LONGITUDE, st$LATITUDE, st$max_doy, cex= 0.3)
+
+# Coldest
+par(bg = "grey90")
+plot(NA, NA, xlim = c(min(usa$long), max(usa$long)), 
+     ylim = c(min(usa$lat), max(usa$lat)), asp = 1.3, 
+     axes = F, xlab = "", ylab = "", 
+     main = "Estimated coldest day of the year \nat USCRN weather stations")
+
+invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
+                                   lwd = 0.5, border = "grey30", col = "white")))
+text(st$LONGITUDE, st$LATITUDE, st$min_doy, cex= 0.3)
+
 ```
 
 
