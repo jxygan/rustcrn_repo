@@ -20,12 +20,7 @@ library(rustcrn)
 
 Make a map of the average temperature at each station for the month of March 2024.
 ```{r}
-
-usa <- ggplot2::map_data("state")
-
-station_id <- stations[, 1]
-
-
+# station_id <- stations[, 1]
 # result <- 
 # 
 # dim(full_daily_weather)[2]
@@ -38,31 +33,38 @@ station_id <- stations[, 1]
 # 
 # tapply(result$T_DAILY_AVG, result$station_id, mean)
 
-tempera <- subset(full_daily_weather, full_daily_weather$LST_DATE >= as.Date("2024-03-01") &
+tempera <- subset(full_daily_weather, 
+                  full_daily_weather$LST_DATE >= as.Date("2024-03-01") &
                            full_daily_weather$LST_DATE <= as.Date("2024-03-31"))
 
 
-anyNA(tempera$T_DAILY_AVG)
+# anyNA(tempera$T_DAILY_AVG)
 
-tapp <- tapply(tempera$T_DAILY_AVG, tempera$WBANNO, function(x) {mean(x, na.rm = T)} )
+tapp <- tapply(tempera$T_DAILY_AVG, 
+               tempera$WBANNO, function(x) {mean(x, na.rm = T)} )
 
-as.numeric(names(tapp))
-
-
-
-
- 
-
-
-
-
+dat <- stations[match(as.numeric(names(tapp)), stations$WBANNO),] 
+dat$mar_temp <- tapp
 ```
 
 
 Fit a spatial model and plot an interpolated map of average temperatures for March 2024. Consider including elevation in your model.
 ```{r}
+dat_sf <- sf::st_as_sf(x = dat, coords = c("LONGITUDE", "LATITUDE"), 
+                       crs = 4326, remove = TRUE)
+elev <- elevatr::get_elev_point(dat_sf, src = "aws")
+dat$elevation <- elev$elevation
 
-plotting_interpolation(tapp, as.numeric(names(tapp)), 100, 
+grid_sf <- sf::st_as_sf(x = grid_points_usa(), coords = c("long", "lat"), 
+                        crs = 4326)
+elev.pred <- elevatr::get_elev_point(grid_sf, src = "aws")
+elev.mat <- cbind(1, elev.pred$elevation)
+
+mar_inter <- interpolation(mar_temp ~ LONGITUDE + LATITUDE + elevation, 
+                           X_pred = elev.mat, 
+                           data = dat)
+
+plotting_interpolation(mar_inter, 
                        main = "Estimated average temperatures in March 2024", 
                        palette = "Temps")
 
@@ -70,6 +72,8 @@ plotting_interpolation(tapp, as.numeric(names(tapp)), 100,
 
 Estimate the warmest and coldest day of the year for each station, and plot those days on two maps. Think carefully about how to represent the days numerically.
 ```{r}
+usa <- ggplot2::map_data("state")
+
 # par(mfrow = c(1,2))
 # Warmest
 par(bg = "grey90")
@@ -142,11 +146,8 @@ for(i in 1:nrow(trends)) {
   trends[i,1:5] <- temp_trend(trends[i,1])
 }
 
-sig <- rep("", times = nrow(trends))
-sig[trends$p < 0.1] <- "."
-sig[trends$p < 0.05] <- "*"
-sig[trends$p < 0.01] <- "**"
-sig[trends$p < 0.001] <- "***"
+sig <- rep(FALSE, times = nrow(trends))
+sig[trends$p < 0.001] <- TRUE
 
 trends$sig <- sig
 trends$color <- lapply(trends$trend, function(x) {
@@ -169,23 +170,24 @@ plot(NA, NA, xlim = c(min(usa$long), max(usa$long)),
 invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
                                    lwd = 0.5, border = "grey30", col = "white")))
 
-text(plot_trends$LONGITUDE, plot_trends$LATITUDE, 
-     label = paste0(format(plot_trends$trend, digits = 2, scientific = TRUE), 
-                    sig), 
-     col = as.character(plot_trends$color), cex = 0.5)
+points(plot_trends$LONGITUDE[sig], plot_trends$LATITUDE[sig], 
+       col = "orange", pch = 8, cex = 0.6)
+points(plot_trends$LONGITUDE, plot_trends$LATITUDE,
+     col = as.character(plot_trends$color), pch = 16,  cex = 0.5)
+
 
 lgd <- rep(NA, 11)
 lgd[c(1,6,11)] = c(1,0,-1)
-legend(-75, 33, legend = lgd, 
+legend(-75, 35, legend = lgd, 
        fill = colorRampPalette(colors = c('red','black','blue'))(11),
        border = NA, y.intersp = 0.5, cex = 0.5, box.lwd = 0,
        title = "°C/year \n", 
        xjust = 0)
 
 legend(-120, 31, 
-       legend = c("p < 0.1 .", "p < 0.05 *", "p < 0.01 **", "p < 0.001 ***"), 
+       legend = c("p < 0.001"), col = "orange", pch = 8, 
        title = "Significance", 
-       horiz = F, cex = 0.5, box.lwd = 0)
+       horiz = F, cex = 0.6, box.lwd = 0)
 ```
 
 In your report, write the statistical model that you used in mathematical 
@@ -203,10 +205,21 @@ errors are sufficiently small.
 high_se <- which(trends$se > 5)
 low_len <- which(trends$len < 5)
 
-hist(trends$se)
+# trends_sf <- sf::st_as_sf(x = trends, coords = c("LONGITUDE", "LATITUDE"), 
+#                        crs = 4326, remove = TRUE)
+# elev <- get_elev_point(trends_sf, src = "aws")
+# trends$elevation <- elev$elevation
 
-inter_trends <- trends[-c(high_se, low_len),]
-plotting_interpolation(inter_trends$trend, stations = inter_trends$WBANNO, 
+inter_trends <- trends[-c(high_se, low_len, hi_ak_sa),]
+
+
+
+# i_t <- interpolation(trend ~ LONGITUDE + LATITUDE + elevation, 
+#                      X_pred = elev.mat,
+#                      data = inter_trends)
+i_t <- interpolation(trend ~ LONGITUDE + LATITUDE, 
+                     data = inter_trends)
+plotting_interpolation(i_t, 
                        main = paste0("Estimated temperature trend in °C/year", 
                                      " across the \nUS contiguous 48"), 
                        palette = "Temps")

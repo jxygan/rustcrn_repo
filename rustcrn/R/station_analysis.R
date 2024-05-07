@@ -18,7 +18,7 @@
 #' @importFrom rlang .data
 time_series <- function(station_id, start_date = NULL, end_date = NULL) {
   # Filter data by station ID first
-  station_data <- full_daily_weather[full_daily_weather$WBANNO == station_id, ]
+  station_data <- rustcrn::full_daily_weather[rustcrn::full_daily_weather$WBANNO == station_id, ]
 
   # Check and apply start date filter if provided
   if (!is.null(start_date)) {

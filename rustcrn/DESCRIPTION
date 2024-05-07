@@ -10,7 +10,6 @@ License: GNU General Public License
 Encoding: UTF-8
 LazyData: true
 Imports:
-  dplyr,
   stats,
   ggplot2,
   sp,
@@ -22,6 +21,8 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown,
+    sf, 
+    elevatr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
