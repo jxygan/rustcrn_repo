@@ -148,7 +148,7 @@ invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
                                    lwd = 0.5, border = "grey30", col = "white")))
 
 # Write in day of year 
-text(st$LONGITUDE, st$LATITUDE, st$max_doy, cex= 0.5)
+text(st$LONGITUDE, st$LATITUDE, st$max_doy, cex= 0.4)
 
 ## Coldest
 # Draw plotting window and US states
@@ -163,7 +163,7 @@ invisible(tapply(usa, usa$group, function(x) polygon(x$long, x$lat,
                                    lwd = 0.5, border = "grey30", col = "white")))
 
 # Write in day of year 
-text(st$LONGITUDE, st$LATITUDE, st$min_doy, cex= 0.3)
+text(st$LONGITUDE, st$LATITUDE, st$min_doy, cex= 0.4)
 
 ```
 
@@ -186,6 +186,21 @@ T = \beta_0 + \beta_1\text{cos}(2\pi\frac{d}{P})
 + \beta_2\text{sin}(2\pi\frac{d}{P}) + \beta_3\text{cos}(4\pi\frac{d}{P}) 
 + \beta_4\text{sin}(4\pi\frac{d}{P}) + \epsilon
 $$
+
+Interpolate maps of the warmest and coldest days, and plot the interpolated maps of warmest and coldest days.
+
+```{r}
+# Create interpolations 
+inter_min <- interpolation(min_doy ~ LONGITUDE + LATITUDE, data = st)
+inter_max <- interpolation(max_doy ~ LONGITUDE + LATITUDE, data = st)
+
+# Plot interpolations. Estimates for coldest day of the year are inaccurate
+# because of how data is encoded for coldest day (close to Jan or close to Dec). 
+plotting_interpolation(inter_min, "Coldest day of the year", 
+                       palette = "Temps")
+plotting_interpolation(inter_max, "Warmest day of the year", 
+                       palette = "Temps")
+```
 
 
 4. Make a single plot of the estimated yearly cycles for 10 different
