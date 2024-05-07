@@ -39,6 +39,7 @@
 interpolation <- function(formula, data, X_pred = NULL, resolution = 100){
   #get rid of Hawaii and alaska from Data (longitudee less than -125)
   data <- data[data[[3]] > -125, ]
+  data <- data[data[[3]] < 0, ]
   
   # read formula
   mi <- match.call()
