@@ -1,6 +1,6 @@
 ---
 title: "vignette"
-output: rmarkdown::html_vignette
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{vignette}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   dpi = 200, 
   fig.height = 5, 
   fig.width = 8,
-  out.height = 400, 
+  # out.height = 400, 
   collapse = TRUE,
   comment = "#>"
 )
@@ -353,5 +353,5 @@ which has much greater increase, and the Southwest, which has lower magnitude
 increase), but in general agrees that the southern and coastal US has greater 
 temperature trends than the central US. 
 
-![](https://www.ncei.noaa.gov/monitoring-content/temp-and-precip/us-trends/tavg/trends-tavg-ann-30year-full.gif)
+![](NOAA-trends.jpg)
 
